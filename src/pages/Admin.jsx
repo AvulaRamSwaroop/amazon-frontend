@@ -11,6 +11,16 @@ const Admin = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Add Product Form State
+  const [productForm, setProductForm] = useState({
+    name: "",
+    description: "",
+    price: "",
+    category: "",
+    stock: "",
+    images: [],
+  });
+
   useEffect(() => {
     if (user && user.role === "admin") {
       fetchDashboardStats();
@@ -127,6 +137,77 @@ const Admin = () => {
     }
   };
 
+  // Add Product Functions
+  const handleProductInputChange = (e) => {
+    const { name, value } = e.target;
+    setProductForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleFileChange = (e) => {
+    setProductForm((prev) => ({
+      ...prev,
+      images: Array.from(e.target.files),
+    }));
+  };
+
+  const handleAddProduct = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("name", productForm.name);
+      formData.append("description", productForm.description);
+      formData.append("price", productForm.price);
+      formData.append("category", productForm.category);
+      formData.append("stock", productForm.stock);
+
+      // Append images
+      productForm.images.forEach((image) => {
+        formData.append("images", image);
+      });
+
+      const response = await fetch(
+        `${import.meta.env.VITE_APP_API_URL}/products`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+          body: formData,
+        }
+      );
+
+      if (response.ok) {
+        toast.success("Product added successfully!");
+        setProductForm({
+          name: "",
+          description: "",
+          price: "",
+          category: "",
+          stock: "",
+          images: [],
+        });
+        // Reset file input
+        document.getElementById("images").value = "";
+        // Refresh products if on products tab
+        if (activeTab === "products") {
+          fetchProducts();
+        }
+      } else {
+        const data = await response.json();
+        toast.error(data.message || "Failed to add product");
+      }
+    } catch (error) {
+      toast.error("Error adding product");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
     if (tab === "users") fetchUsers();
@@ -155,19 +236,21 @@ const Admin = () => {
         {/* Tab Navigation */}
         <div className="mb-8">
           <nav className="flex space-x-8">
-            {["dashboard", "users", "products", "orders"].map((tab) => (
-              <button
-                key={tab}
-                onClick={() => handleTabClick(tab)}
-                className={`py-2 px-4 border-b-2 font-medium text-sm ${
-                  activeTab === tab
-                    ? "border-orange-500 text-orange-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700"
-                }`}
-              >
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              </button>
-            ))}
+            {["dashboard", "add-product", "users", "products", "orders"].map(
+              (tab) => (
+                <button
+                  key={tab}
+                  onClick={() => handleTabClick(tab)}
+                  className={`py-2 px-4 border-b-2 font-medium text-sm ${
+                    activeTab === tab
+                      ? "border-orange-500 text-orange-600"
+                      : "border-transparent text-gray-500 hover:text-gray-700"
+                  }`}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1).replace("-", " ")}
+                </button>
+              )
+            )}
           </nav>
         </div>
 
@@ -212,6 +295,120 @@ const Admin = () => {
                 ${stats.totalRevenue || 0}
               </p>
             </div>
+          </div>
+        )}
+
+        {/* Add Product Form */}
+        {activeTab === "add-product" && (
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-2xl font-bold mb-6">Add New Product</h2>
+            <form onSubmit={handleAddProduct} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Product Name
+                  </label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={productForm.name}
+                    onChange={handleProductInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Category
+                  </label>
+                  <select
+                    name="category"
+                    value={productForm.category}
+                    onChange={handleProductInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  >
+                    <option value="">Select Category</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Home">Home & Kitchen</option>
+                    <option value="Books">Books</option>
+                    <option value="Sports">Sports & Outdoors</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Price ($)
+                  </label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={productForm.price}
+                    onChange={handleProductInputChange}
+                    min="0"
+                    step="0.01"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Stock Quantity
+                  </label>
+                  <input
+                    type="number"
+                    name="stock"
+                    value={productForm.stock}
+                    onChange={handleProductInputChange}
+                    min="0"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  value={productForm.description}
+                  onChange={handleProductInputChange}
+                  rows="4"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Product Images
+                </label>
+                <input
+                  type="file"
+                  id="images"
+                  multiple
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                />
+                <p className="text-sm text-gray-500 mt-1">
+                  Select up to 5 images (JPEG, PNG, GIF)
+                </p>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-orange-600 text-white py-3 px-4 rounded-md hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? "Adding Product..." : "Add Product"}
+              </button>
+            </form>
           </div>
         )}
 

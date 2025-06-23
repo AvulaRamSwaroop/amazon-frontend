@@ -36,7 +36,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <span className="text-2xl font-bold text-orange-400">Amazon</span>
-            <span className="text-sm">.clone</span>
+            {/* <span className="text-sm">.clone</span> */}
           </Link>
 
           {/* Search Bar */}
