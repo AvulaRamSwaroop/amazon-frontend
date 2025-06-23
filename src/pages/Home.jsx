@@ -32,7 +32,7 @@ const Home = () => {
       <div className="bg-gradient-to-r from-orange-400 to-orange-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
-            Welcome to Amazon Clone
+            Welcome to Vendora
           </h1>
           <p className="text-xl mb-8">
             Find everything you need at great prices

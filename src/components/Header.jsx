@@ -35,7 +35,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-orange-400">Amazon</span>
+            <span className="text-2xl font-bold text-orange-400">vendora</span>
             {/* <span className="text-sm">.clone</span> */}
           </Link>
 
@@ -66,6 +66,14 @@ const Header = () => {
                   <p className="text-gray-300">Hello, {user.name}</p>
                   <p className="font-medium">Account & Lists</p>
                 </div>
+                {user && (
+                  <Link
+                    to="/profile"
+                    className="text-sm hover:text-orange-400 transition-colors"
+                  >
+                    Orders
+                  </Link>
+                )}
                 <button
                   onClick={handleLogout}
                   className="text-sm hover:text-orange-400 transition-colors"
