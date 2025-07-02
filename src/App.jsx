@@ -37,6 +37,7 @@ const App = () => {
               <Route
                 path="/checkout"
                 element={
+                  //for checking whether user loggd or nt
                   <ProtectedRoute>
                     <Checkout />
                   </ProtectedRoute>
@@ -53,7 +54,7 @@ const App = () => {
               <Route
                 path="/admin"
                 element={
-                  <ProtectedRoute adminOnly={true}>
+                  <ProtectedRoute>
                     <Admin />
                   </ProtectedRoute>
                 }

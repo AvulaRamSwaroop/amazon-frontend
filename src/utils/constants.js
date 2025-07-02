@@ -1,6 +1,6 @@
 // API Configuration
 export const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+  import.meta.env.VITE_APP_API_URL || "http://localhost:5000/api";
 
 // App Configuration
 export const APP_NAME = "Amazon Clone";
