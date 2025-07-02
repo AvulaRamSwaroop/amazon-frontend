@@ -1,15 +1,13 @@
 import axios from "axios";
 
-// Create axios instance with base configuration
 const api = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:5000/api",
+  baseURL: import.meta.env.VITE_APP_API_URL || "http://localhost:5000/api",
   timeout: 10000,
   headers: {
     "Content-Type": "application/json",
   },
 });
 
-// Request interceptor to add auth token
 api.interceptors.request.use(
   (config) => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -23,18 +21,16 @@ api.interceptors.request.use(
   }
 );
 
-// Response interceptor to handle errors
 api.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
     if (error.response) {
-      // Server responded with error status
       const { status, data } = error.response;
 
       if (status === 401) {
-        // Unauthorized - clear user data and redirect to login
+        // Unauthorized
         localStorage.removeItem("user");
         window.location.href = "/login";
       }
