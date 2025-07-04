@@ -91,7 +91,6 @@ export const updateProfile = createAsyncThunk(
     }
   }
 );
-
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
   loading: false,
