@@ -45,7 +45,7 @@ api.interceptors.response.use(
     }
   }
 );
-
+//Placed for testing mostly cuz we giot redux ones already
 // Auth API calls
 export const authAPI = {
   register: (userData) => api.post("/auth/register", userData),
