@@ -115,7 +115,6 @@ export const removeFromCart = createAsyncThunk(
     }
   }
 );
-
 // Clear cart
 export const clearCart = createAsyncThunk(
   "cart/clearCart",
