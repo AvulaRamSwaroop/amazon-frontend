@@ -61,7 +61,7 @@ A modern, full-stack e-commerce application with clean UI and comprehensive shop
 
 ## 🚀 Deployment
 
-- **Backend:** Deploy to [Render](https://amazon-backend-482v.onrender.com/api) with the backend `.env` variables.
+- **Backend:** Deploy to [Render](https://amazon-backend-482v.onrender.com/) with the backend `.env` variables.
 - **Frontend:** Deploy to [Vercel](https://amazon-frontend-chi-five.vercel.app/) with the production API URL in the `.env`.
 
 ## 📦 Repository Links
