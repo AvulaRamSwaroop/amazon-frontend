@@ -46,6 +46,11 @@ A modern, full-stack e-commerce application with clean UI and comprehensive shop
 3. **Add items to cart** and proceed to checkout  
 4. **Admin users** can manage products via `/admin`  
 5. **Track orders** in user profile  
+## ScreenShots 
+1. **this is  for admin only**
+2. **by default everyone are customers**
+3. **here we can able to add a product and check orders as well**
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b36b20bc-2b7e-46c3-a745-905393103ca4" />
 
 ## 🔧 API Endpoints
 
